@@ -318,7 +318,6 @@ object AnkiCardCreator {
             }
 
             val fieldMap = fieldMapParser(effectiveFieldMapJson)
-            android.util.Log.d(TAG, "addToAnki: parsed fieldMap=$fieldMap")
             val cloze = if (sentence.isNotEmpty() && offset >= 0) {
                 // Use result.matched (the exact surface form the dictionary engine consumed)
                 // so the bold window is precisely the word that was looked up, not the base form.
@@ -433,7 +432,6 @@ object AnkiCardCreator {
                 val tagList = tagsWithPlaceholders
                     .map { value -> resolveMediaPlaceholders(value, committedMedia) }
                     .mapNotNull(::normalizeAnkiTag)
-                android.util.Log.d(TAG, "addToAnki: built fields=$fields")
 
                 val noteId = when (finalDecision) {
                     is AnkiDuplicateDecision.Overwrite -> {

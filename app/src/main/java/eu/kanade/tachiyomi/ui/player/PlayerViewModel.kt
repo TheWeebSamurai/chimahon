@@ -74,11 +74,12 @@ import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.getChangedAt
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
+import eu.kanade.tachiyomi.ui.player.mining.MediaCaptureService
+import eu.kanade.tachiyomi.ui.player.mining.SentenceAudioMpvPropertyReader
+import eu.kanade.tachiyomi.ui.player.mining.SentenceAudioMpvSnapshotReader
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
-import eu.kanade.tachiyomi.ui.player.sentenceaudio.SentenceAudioMpvPropertyReader
-import eu.kanade.tachiyomi.ui.player.sentenceaudio.SentenceAudioMpvSnapshotReader
 import eu.kanade.tachiyomi.ui.youtube.YouTubePreferences
 import eu.kanade.tachiyomi.ui.youtube.YouTubeResolver
 import eu.kanade.tachiyomi.ui.youtube.allowsExternalSubtitleLookup
@@ -160,8 +161,6 @@ import kotlin.collections.first
 import kotlin.coroutines.cancellation.CancellationException
 
 private const val MAX_SUBTITLE_HISTORY = 120
-private const val MAX_SCENE_DIMENSION = 640
-private const val SCENE_DIMENSION_ALIGNMENT = 16
 private const val VIDEO_SELECTION_DELIMITER = "\u001e"
 class PlayerViewModelProviderFactory(
     private val activity: PlayerActivity,
@@ -355,7 +354,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     val cachePath: String = activity.cacheDir.path
 
-    internal val mediaCapture = PlayerMediaCaptureService(
+    internal val mediaCapture = MediaCaptureService(
         context = activity,
         cachePath = cachePath,
         getVideo = { currentVideo.value },
@@ -3121,13 +3120,18 @@ class PlayerViewModel @JvmOverloads constructor(
         val subtitleFlag = if (showSubtitles) "subtitles" else "video"
 
         MPVLib.command(arrayOf("screenshot-to-file", filename, subtitleFlag))
-        val tempFile = File(filename).takeIf { it.exists() } ?: return null
+        val tempFile = File(filename).takeIf { it.exists() && it.length() > 0L }
+            ?: return fallbackScreenshotStream()
         val newFile = File("$cachePath/mpv_screenshot.png")
 
         newFile.delete()
         tempFile.renameTo(newFile)
         return newFile.takeIf { it.exists() }?.inputStream()
+            ?: fallbackScreenshotStream()
     }
+
+    private fun fallbackScreenshotStream(): InputStream? =
+        runBlocking { mediaCapture.captureScreenshotStreamViaFfmpeg() }
 
     suspend fun captureVideoFrameForOcr(): Bitmap? = mediaCapture.captureVideoFrameForOcr()
 
