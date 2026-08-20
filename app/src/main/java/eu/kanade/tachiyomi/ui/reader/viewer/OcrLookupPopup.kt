@@ -510,9 +510,9 @@ fun OcrLookupPopup(
         ).toDp().coerceAtLeast(120.dp)
         Pair(
             if (isRecursiveChild) popupWidthPref.dp.coerceAtMost(childMaxWidth).coerceAtLeast(120.dp)
-            else popupWidthPref.dp.coerceIn(280.dp, sw * 0.9f),
+            else popupWidthPref.dp.coerceAtLeast(280.dp).coerceAtMost(sw * 0.9f),
             if (isRecursiveChild) popupHeightPref.dp.coerceAtMost(childMaxHeight).coerceAtLeast(120.dp)
-            else popupHeightPref.dp.coerceIn(200.dp, sh * 0.8f),
+            else popupHeightPref.dp.coerceAtLeast(200.dp).coerceAtMost(sh * 0.8f),
         )
     }
 
