@@ -316,13 +316,20 @@ private fun loadDictionaryList(context: Context) {
     Log.d(TAG, "loadDictionaryList: called")
     val dictionariesDir = File(context.getExternalFilesDir(null), "dictionaries")
     val names = if (dictionariesDir.exists()) {
-        listOf("term", "frequency", "pitch", "kanji")
+        val typed = listOf("term", "frequency", "pitch", "kanji")
             .flatMap { type ->
                 val typeDir = File(dictionariesDir, type)
                 if (!typeDir.isDirectory) emptyList()
                 else typeDir.listFiles()?.filter { it.isDirectory }?.map { it.name }.orEmpty()
             }
             .distinct()
+        if (typed.isNotEmpty()) {
+            typed
+        } else {
+            // Fallback for flat layout (pre-migration or probe failure) - minimal clean fix
+            val typeSet = setOf("term", "frequency", "pitch", "kanji")
+            dictionariesDir.listFiles()?.filter { it.isDirectory && it.name !in typeSet }?.map { it.name }.orEmpty().distinct()
+        }
     } else {
         emptyList()
     }
@@ -2367,6 +2374,8 @@ object SettingsDictionaryScreen : SearchableSettings {
         onDismiss: () -> Unit,
         onToggleMarker: (String) -> Unit,
     ) {
+        val context = LocalContext.current
+        LaunchedEffect(Unit) { loadDictionaryList(context) }
         var query by remember { mutableStateOf("") }
         var selectedSection by remember { mutableStateOf<String?>(null) }
         var singleGlossaryExpanded by remember { mutableStateOf(false) }
