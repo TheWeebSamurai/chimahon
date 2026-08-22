@@ -74,7 +74,7 @@ class PanelDetectionRepositoryImpl(
         val libDir = File(File(context.filesDir, MODEL_ROOT_DIR), "lib")
         val liteRt = File(libDir, "$abi/libLiteRt.so")
         val litertJni = File(libDir, "$abi/liblitert_jni.so")
-        if (!liteRt.isFile || !litertJni.isFile) {
+        if (!liteRt.isFile || liteRt.length() == 0L || !litertJni.isFile || litertJni.length() == 0L) {
             logcat(LogPriority.DEBUG) {
                 "Panel detector native libs not downloaded (LiteRt=${liteRt.isFile} jni=${litertJni.isFile})"
             }
@@ -101,9 +101,9 @@ class PanelDetectionRepositoryImpl(
     private fun panelModelFile(): File? {
         val abi = supportedAbi() ?: return null
         val libDir = File(File(context.filesDir, MODEL_ROOT_DIR), "lib")
-        if (!File(libDir, "$abi/libLiteRt.so").isFile) return null
-        if (!File(libDir, "$abi/liblitert_jni.so").isFile) return null
-        return File(File(context.filesDir, MODEL_ROOT_DIR), "model.tflite")
+        if (!File(libDir, "$abi/libLiteRt.so").let { it.isFile && it.length() > 0 }) return null
+        if (!File(libDir, "$abi/liblitert_jni.so").let { it.isFile && it.length() > 0 }) return null
+        return File(File(context.filesDir, MODEL_ROOT_DIR), "model.tflite").let { if (it.isFile && it.length() > 0) it else null }
     }
 
     override suspend fun detectPanels(
