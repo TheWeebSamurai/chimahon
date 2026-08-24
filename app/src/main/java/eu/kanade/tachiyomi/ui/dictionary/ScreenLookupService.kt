@@ -83,6 +83,13 @@ class ScreenLookupService : Service() {
             }
         }
     }
+    private val displayListener = object : DisplayManager.DisplayListener {
+        override fun onDisplayAdded(displayId: Int) {}
+        override fun onDisplayRemoved(displayId: Int) {}
+        override fun onDisplayChanged(displayId: Int) {
+            if (displayId == Display.DEFAULT_DISPLAY) clampFloatingButton()
+        }
+    }
     private val windowManager: WindowManager
         get() = getSystemService()!!
 
@@ -94,6 +101,9 @@ class ScreenLookupService : Service() {
             IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS),
             ContextCompat.RECEIVER_EXPORTED,
         )
+        runCatching {
+            getSystemService<DisplayManager>()?.registerDisplayListener(displayListener, mainHandler)
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -129,6 +139,7 @@ class ScreenLookupService : Service() {
     }
 
     override fun onDestroy() {
+        runCatching { getSystemService<DisplayManager>()?.unregisterDisplayListener(displayListener) }
         runCatching { unregisterReceiver(closeSystemDialogsReceiver) }
         captureJob?.cancel()
         overlayController?.release()
@@ -439,6 +450,15 @@ class ScreenLookupService : Service() {
         }
         floatingButton = null
         floatingButtonParams = null
+    }
+
+    private fun clampFloatingButton() {
+        val params = floatingButtonParams ?: return
+        val button = floatingButton ?: return
+        val bounds = captureSize()
+        params.x = params.x.coerceIn(0, (bounds.width - params.width).coerceAtLeast(0))
+        params.y = params.y.coerceIn(0, (bounds.height - params.height).coerceAtLeast(0))
+        runCatching { windowManager.updateViewLayout(button, params) }
     }
 
     private fun releaseProjection() {
