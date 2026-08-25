@@ -27,6 +27,7 @@ import eu.kanade.domain.source.interactor.GetSourcesWithFavoriteCount
 import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.interactor.ToggleIncognito
 import eu.kanade.domain.source.interactor.ToggleLanguage
+import eu.kanade.domain.source.interactor.ToggleAnimeLanguage
 import eu.kanade.domain.source.interactor.ToggleSource
 import eu.kanade.domain.source.interactor.ToggleSourcePin
 import eu.kanade.domain.track.interactor.AddTracks
@@ -271,6 +272,7 @@ class DomainModule : InjektModule {
         addFactory { GetSourcesWithNonLibraryManga(get()) }
         addFactory { SetMigrateSorting(get()) }
         addFactory { ToggleLanguage(get()) }
+        addFactory { ToggleAnimeLanguage(get()) }
         addFactory { ToggleSource(get()) }
         addFactory { ToggleSourcePin(get()) }
         addFactory { TrustExtension(get(), get()) }
