@@ -2539,9 +2539,10 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private fun selectYouTubeStream(streams: List<Video>, targetQuality: String): Video {
         val targetPixels = YouTubeResolver.parseResolution(targetQuality)
-        return streams.filter { YouTubeResolver.parseResolution(it.videoTitle) <= targetPixels }
+        return streams.filter { YouTubeResolver.parseResolution(it.videoTitle) in 1..targetPixels }
             .maxByOrNull { YouTubeResolver.parseResolution(it.videoTitle) }
-            ?: streams.minByOrNull { YouTubeResolver.parseResolution(it.videoTitle) }
+            ?: streams.filter { YouTubeResolver.parseResolution(it.videoTitle) > 0 }
+                .minByOrNull { YouTubeResolver.parseResolution(it.videoTitle) }
             ?: streams.first()
     }
 
