@@ -4,6 +4,27 @@ All notable changes to Chimahon are documented here.
 
 The format follows a Keep a Changelog style and uses Semantic Versioning.
 
+## [v2.3.4]
+
+### Added
+- Separate language filter for anime extensions and sources, independent from manga
+
+### Changed
+- Player gesture settings renamed and clarified to match Anikku
+- Updated mpv/ffmpeg builds with improved sentence audio and animated AVIF mining
+- Clearer error details when sentence audio capture fails
+
+### Fixed
+- YouTube videos stuck at low quality even when higher resolutions were available
+- Dictionary floating button going off-screen after rotating the screen
+- Screen lookup crop presets not producing correct crops
+- Panel detection crashing while the AI model was still downloading
+- Anki single-glossary options not showing sometimes
+- Crash when loading cover colors in the background
+- Discord presence crashing when it starts
+- About screen crash when the app is backgrounded
+- Picture-in-picture popups crashing when they don't fit the window
+
 ## [v2.3.3]
 
 ### Added
