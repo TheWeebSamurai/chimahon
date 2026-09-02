@@ -43,8 +43,10 @@ class DictionaryPreferences(
     /** Floating screen-lookup OCR capture button background color as ARGB int; 0 = theme primary. */
     fun ocrButtonColor() = preferenceStore.getInt("pref_ocr_button_color", 0)
 
-    /** "cloud" (default) or "local" */
+    /** "cloud" (default), "local", or "owocr". */
     fun ocrEngine() = preferenceStore.getString("pref_ocr_engine", "cloud")
+
+    fun owOcrUrl() = preferenceStore.getString("pref_owocr_url", "ws://127.0.0.1:7331")
 
     fun parallelOcrLimit() = preferenceStore.getInt("pref_parallel_ocr_limit", 1)
 

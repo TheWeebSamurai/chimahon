@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Chimahon</string>
+    <string name="app_name" translatable="false">ChimahonPlus</string>
 
     <!-- Generic strings -->
     <string name="on">On</string>
@@ -413,6 +413,8 @@
     <string name="pref_category_ocr">OCR</string>
     <string name="pref_ocr_summary">Engine, appearance, cache</string>
     <string name="pref_category_engine">Engine</string>
+    <string name="pref_owocr_url">OWOCR WebSocket URL</string>
+    <string name="pref_owocr_url_summary">WebSocket address of an OWOCR instance configured for JSON output</string>
     <string name="pref_category_ocr_boxes">OCR Boxes</string>
     <string name="pref_category_screen_overlay">Screen Overlay</string>
     <string name="pref_category_behavior">Behavior</string>

@@ -33,6 +33,10 @@ class ReaderOcrSourceTest {
         assertFalse(ReaderOcrSource.LOCAL.usesMokuro)
         assertFalse(ReaderOcrSource.LOCAL.usesPersistentCache)
         assertEquals(OcrEngineType.LOCAL, ReaderOcrSource.LOCAL.recognitionEngine)
+
+        assertFalse(ReaderOcrSource.OWOCR.usesMokuro)
+        assertFalse(ReaderOcrSource.OWOCR.usesPersistentCache)
+        assertEquals(OcrEngineType.OWOCR, ReaderOcrSource.OWOCR.recognitionEngine)
     }
 
     @Test

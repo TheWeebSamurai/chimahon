@@ -13,6 +13,10 @@
 
 Chimahon is a specialized Android reader designed for language learners and immersion enthusiasts. It extends the powerful core of **Mihon/Komikku** with integrated tools for dictionary lookup, OCR-assisted text capture, and seamless flashcard creation for vocabulary mining.
 
+### OWOCR
+
+OWOCR can be used as an OCR engine for manga pages, chapter OCR, screen lookup, and video capture. Configure an OWOCR instance with `read_from = websocket`, `write_to = websocket`, and `output_format = json`, then open `Settings > OCR`, select `OWOCR`, and enter its WebSocket address (for example, `ws://192.168.1.10:7331`).
+
 ## 🖼️ Screenshots
 
 <p align="center">

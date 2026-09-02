@@ -127,6 +127,7 @@ object SettingsOcrScreen : SearchableSettings {
                         preference = ocrEnginePref,
                         entries = persistentListOf(
                             "cloud" to "Cloud (Google Lens)",
+                            "owocr" to "OWOCR",
                             *if (eu.kanade.tachiyomi.BuildConfig.HAS_LOCAL_OCR) {
                                 arrayOf("local" to "Local (On-Device)")
                             } else {
@@ -140,6 +141,12 @@ object SettingsOcrScreen : SearchableSettings {
                             }
                             true
                         },
+                    ),
+                    Preference.PreferenceItem.EditTextPreference(
+                        preference = dictionaryPreferences.owOcrUrl(),
+                        title = stringResource(MR.strings.pref_owocr_url),
+                        subtitle = stringResource(MR.strings.pref_owocr_url_summary),
+                        onValueChanged = { it.trim().isNotEmpty() },
                     ),
                     Preference.PreferenceItem.SliderPreference(
                         value = parallelOcrLimit,

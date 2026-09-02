@@ -11,6 +11,11 @@ class OcrEngineTypeTest {
     }
 
     @Test
+    fun `owocr preference selects OWOCR`() {
+        assertEquals(OcrEngineType.OWOCR, OcrEngineType.fromPreference("owocr"))
+    }
+
+    @Test
     fun `other preferences select Google Lens`() {
         assertEquals(OcrEngineType.CLOUD, OcrEngineType.fromPreference("cloud"))
         assertEquals(OcrEngineType.CLOUD, OcrEngineType.fromPreference("unexpected"))

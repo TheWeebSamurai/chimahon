@@ -29,6 +29,12 @@ enum class ReaderOcrSource(
         usesPersistentCache = false,
         recognitionEngine = OcrEngineType.LOCAL,
     ),
+    OWOCR(
+        usesMokuro = false,
+        usesPersistentCache = false,
+        persistentCacheVariant = "owocr",
+        recognitionEngine = OcrEngineType.OWOCR,
+    ),
     ;
 
     val persistsOcrResults: Boolean

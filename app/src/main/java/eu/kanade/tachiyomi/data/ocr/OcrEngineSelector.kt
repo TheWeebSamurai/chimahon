@@ -16,11 +16,16 @@ import java.io.ByteArrayOutputStream
 enum class OcrEngineType {
     CLOUD,
     LOCAL,
+    OWOCR,
     ;
 
     companion object {
         fun fromPreference(value: String): OcrEngineType {
-            return if (value == "local") LOCAL else CLOUD
+            return when (value) {
+                "local" -> LOCAL
+                "owocr" -> OWOCR
+                else -> CLOUD
+            }
         }
     }
 }
@@ -62,6 +67,10 @@ suspend fun recognizePage(
             return emptyList()
         }
         return result
+    }
+
+    if (resolvedEngineType == OcrEngineType.OWOCR) {
+        return Injekt.get<OwOcrClient>().recognize(bytes, language)
     }
 
     val lensClient = Injekt.get<LensClient>()
@@ -106,6 +115,10 @@ suspend fun recognizePage(
             return emptyList()
         }
         return result
+    }
+
+    if (resolvedEngineType == OcrEngineType.OWOCR) {
+        return Injekt.get<OwOcrClient>().recognize(bitmap.toJpegBytes(85), language)
     }
 
     val lensClient = Injekt.get<LensClient>()
